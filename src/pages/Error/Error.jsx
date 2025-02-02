@@ -1,3 +1,3 @@
 export default function Error() {
-  return <h1>Not Found this page, chake url</h1>;
+  return <h1>Not Found this page, check url</h1>;
 }

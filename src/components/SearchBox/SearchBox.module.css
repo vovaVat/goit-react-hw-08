@@ -1,0 +1,10 @@
+.contain {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contain input {
+  display: block;
+  width: 220px;
+}

@@ -1,0 +1,19 @@
+.contain {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  margin-right: 15px;
+}
+
+.contactsLink {
+  margin-right: auto;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  cursor: pointer;
+}
