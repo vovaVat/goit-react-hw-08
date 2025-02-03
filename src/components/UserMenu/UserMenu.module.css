@@ -1,13 +1,10 @@
 .contain {
   display: flex;
-  align-items: center;
+  align-items: end;
+  justify-content: end;
   gap: 15px;
   width: 100%;
   margin-right: 15px;
-}
-
-.contactsLink {
-  margin-right: auto;
 }
 
 p {

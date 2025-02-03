@@ -1,17 +1,24 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { fetchContacts } from "../contacts/operations";
 
-const auth = axios.create({
-  baseURL: "https://connections-api.goit.global/users",
-});
+axios.defaults.baseURL = "https://connections-api.goit.global";
+
+const setAuthHeader = (token) => {
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+};
+
+const clearAuthHeader = () => {
+  axios.defaults.headers.common["Authorization"] = "";
+};
 
 export const register = createAsyncThunk(
   "auth/register",
   async (info, thunkApi) => {
     try {
-      console.log(info);
-      const response = await auth.post("/signup", info);
-      console.log(response);
+      const response = await axios.post("/users/signup", info);
+      setAuthHeader(response.data.token);
       return response.data;
     } catch (err) {
       return thunkApi.rejectWithValue(err.message);
@@ -21,7 +28,8 @@ export const register = createAsyncThunk(
 
 export const login = createAsyncThunk("auth/login", async (info, thunkApi) => {
   try {
-    const response = await auth.post("/login", info);
+    const response = await axios.post("/users/login", info);
+    setAuthHeader(response.data.token);
     return response.data;
   } catch (err) {
     return thunkApi.rejectWithValue(err.message);
@@ -29,18 +37,9 @@ export const login = createAsyncThunk("auth/login", async (info, thunkApi) => {
 });
 
 export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
-  const state = thunkApi.getState();
-  const token = state.auth.token;
-
-  if (!token) {
-    return thunkApi.rejectWithValue("No token found");
-  }
-
   try {
-    await auth.post("/logout", null, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return;
+    await axios.post("/users/logout");
+    clearAuthHeader();
   } catch (err) {
     return thunkApi.rejectWithValue(err.message);
   }
@@ -57,9 +56,8 @@ export const refreshUser = createAsyncThunk(
     }
 
     try {
-      const response = await auth.get("/current", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      setAuthHeader(token);
+      const response = await axios.get("/users/current");
       return response.data;
     } catch (err) {
       return thunkApi.rejectWithValue(err.message);

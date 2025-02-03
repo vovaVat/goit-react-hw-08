@@ -16,23 +16,14 @@ import { fetchContacts } from "./redux/contacts/operations";
 
 function App() {
   const dispatch = useDispatch();
-  const token = useSelector(selectToken);
   const isRefresh = useSelector(selectIsRefreshing);
 
   useEffect(() => {
-    if (token) {
-      dispatch(refreshUser());
-    }
-  }, [dispatch, token]);
-
-  useEffect(() => {
-    if (token) {
-      dispatch(fetchContacts());
-    }
-  }, [dispatch, token]);
+    dispatch(refreshUser());
+  }, [dispatch]);
 
   if (isRefresh) {
-    return <p>Loading...</p>; // Показываем загрузку, пока идет refreshUser
+    return <p>Loading...</p>;
   }
 
   return (
